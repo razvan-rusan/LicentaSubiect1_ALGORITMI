@@ -14,10 +14,14 @@ bool FaraTreiConsoaneConsecutive(char[] s)
     return true;
 }
 
-void MTAB2(int k, char[] s, string cuvant, bool[] b)
+void MTAB2(int k, char[] s, string cuvant, bool[] b, HashSet<string> hs)
 {
     if (k >= s.Length)
     {
+        string word = "";
+        foreach (var ch in s) word += ch;
+        if (hs.Contains(word)) return;
+        else hs.Add(word);
         if (!FaraTreiConsoaneConsecutive(s)) return;
         string s2 = "";
         foreach (char c in s)
@@ -34,7 +38,7 @@ void MTAB2(int k, char[] s, string cuvant, bool[] b)
             {
                 s[k] = cuvant[i]; 
                 b[i] = true;
-                MTAB2(k + 1, s, cuvant, b);
+                MTAB2(k + 1, s, cuvant, b, hs);
                 b[i] = false;
             }
         }
@@ -43,7 +47,9 @@ void MTAB2(int k, char[] s, string cuvant, bool[] b)
 
 void MTAB_helper2(string s)
 {
-    MTAB2(0, new char[s.Length], s, new bool[s.Length]);
+    char[] sorted = s.ToCharArray();
+    Array.Sort(sorted, (char c1, char c2) => c1.CompareTo(c2));
+    MTAB2(0, new char[s.Length], s, new bool[s.Length], new HashSet<string>());
 }
 
 Console.WriteLine("Da-mi un cuvant: ");
